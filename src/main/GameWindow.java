@@ -12,7 +12,7 @@ public class GameWindow {
 		jframe.setSize(400, 400);
 		jframe.setDefaultCloseOperation(jframe.EXIT_ON_CLOSE);//carpiya basinca kapanmasini saglar
 		jframe.add(gamePanel);
-		
+		jframe.setLocationRelativeTo(null);
 		jframe.setVisible(true);
 	}
 }

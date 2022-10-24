@@ -8,6 +8,7 @@ public class Game {
 	public Game() {//constructer
 		gamePanel = new GamePanel(); 
 		gameWindow = new GameWindow(gamePanel);
+		gamePanel.requestFocus();//giris odagi veriliyo
 		
 	}
 	
