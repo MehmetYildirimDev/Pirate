@@ -9,10 +9,13 @@ public class GameWindow {
 		
 		jframe = new JFrame();
 		
-		jframe.setSize(400, 400);
+		
 		jframe.setDefaultCloseOperation(jframe.EXIT_ON_CLOSE);//carpiya basinca kapanmasini saglar
 		jframe.add(gamePanel);
 		jframe.setLocationRelativeTo(null);
+		jframe.setResizable(false);//yeniden boyutlanamaz
+		jframe.pack();//paneli pencereye sigdir diyoruz burada
 		jframe.setVisible(true);
+		
 	}
 }
