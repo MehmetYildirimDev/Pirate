@@ -9,28 +9,39 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import inputs.Mouseinputs;
-import inputs.keyboardinputs;
+import inputs.KeyboardInputs;
+import inputs.MouseInputs;
 
-public class GamePanel extends JPanel{
+import static utilz.Constants.PlayerConstants.*;
+import static utilz.Constants.Directions.*;
 
-	private Mouseinputs mouseinputs;
-	private float xDelta=100 ,yDelta=100;
-	private BufferedImage img,subImg; 
+public class GamePanel extends JPanel {
 
-
-
+	private MouseInputs mouseInputs;
+	private float xDelta = 100, yDelta = 100;
+	private BufferedImage img;
+	private BufferedImage[][] animations;
+	private int aniTick, aniIndex, aniSpeed = 15;
+	private int playerAction = IDLE;
+	private int playerDir = -1;//hareketsizse -1de 
+	private boolean moving = false;
 
 	public GamePanel() {
-		
-
-		mouseinputs = new Mouseinputs(this);//herhangi bir hata olmasin diye boyle yaptik
-		
+		mouseInputs = new MouseInputs(this);
 		importImg();
+		loadAnimations();
+
 		setPanelSize();
-		addKeyListener(new keyboardinputs(this));
-		addMouseListener(mouseinputs);
-		addMouseMotionListener(mouseinputs);
+		addKeyListener(new KeyboardInputs(this));
+		addMouseListener(mouseInputs);
+		addMouseMotionListener(mouseInputs);
+	}
+
+	private void loadAnimations() {
+		animations = new BufferedImage[9][6];
+		for (int j = 0; j < animations.length; j++)
+			for (int i = 0; i < animations[j].length; i++)
+				animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
 	}
 
 	private void importImg() {
@@ -38,42 +49,75 @@ public class GamePanel extends JPanel{
 		try {
 			img = ImageIO.read(is);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 	private void setPanelSize() {
-		Dimension size = new Dimension(1280,720);
-		setMinimumSize(size);
+		Dimension size = new Dimension(1280, 800);
 		setPreferredSize(size);
-		setMaximumSize(size);
-		
 	}
 
-	public void changexDelta(int value) {
-		this.xDelta +=value; 
+	public void setDirection(int direction) {
+		this.playerDir = direction;
+		moving = true;
 	}
 
-	public void changeyDelta(int value) {
-		this.yDelta +=value; 
+	public void setMoving(boolean moving) {
+		this.moving = moving;
 	}
 
-	public void setRectPos(int x, int y) {
-		this.xDelta = x;
-		this.yDelta = y; 
+	private void updateAnimationTick() {
+		aniTick++;
+		if (aniTick >= aniSpeed) {
+			aniTick = 0;
+			aniIndex++;
+			if (aniIndex >= GetSpriteAmount(playerAction))//kac adet calistiricak
+				aniIndex = 0;
+		}
+
+	}
+
+	private void setAnimation() {//hareket halindeyse kosuyor yoksa duruyor
+		if (moving)
+			playerAction = RUNNING;
+		else
+			playerAction = IDLE;
+	}
+
+	private void updatePos() {
+		if (moving) {
+			switch (playerDir) {
+			case LEFT:
+				xDelta -= 5;
+				break;
+			case UP:
+				yDelta -= 5;
+				break;
+			case RIGHT:
+				xDelta += 5;
+				break;
+			case DOWN:
+				yDelta += 5;
+				break;
+			}
+		}
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		subImg = img.getSubimage(1*64, 8*40 , 64, 40);
-		
-		g.drawImage(subImg, (int)xDelta, (int)yDelta, 128, 80, null);
-		//subget ile belirli bir kismini aliyoruz /// baslangic yeri //// boyutlandırıyoruz 
-		
-	}
 
+		updateAnimationTick();
+		setAnimation();
+		updatePos();
+
+		g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta, 256, 160, null);
+	}
 
 }

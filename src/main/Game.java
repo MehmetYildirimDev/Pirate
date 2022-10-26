@@ -6,46 +6,49 @@ public class Game implements Runnable {
 	private GamePanel gamePanel;
 	private Thread gameThread;
 	private final int FPS_SET = 120;
+	private final int UPS_SET = 200;
 	
-	public Game() {//constructer
-		gamePanel = new GamePanel(); 
+
+	public Game() {
+
+		gamePanel = new GamePanel();
 		gameWindow = new GameWindow(gamePanel);
-		gamePanel.requestFocus();//giris odagi veriliyo
+		gamePanel.requestFocus();
 		startGameLoop();
+
 	}
 
 	private void startGameLoop() {
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-	
-	
+
+//	@Override
 	public void run() {
-		double timePerFrame = 1000000000.0/ FPS_SET; //1 saniye = 1000000000.0 nanosaniye
+
+		double timePerFrame = 1000000000.0 / FPS_SET;
 		long lastFrame = System.nanoTime();
-		long now= System.nanoTime();
-		int frames =0;
-		long lastcheck = System.currentTimeMillis();
-		
+		long now = System.nanoTime();
+
+		int frames = 0;
+		long lastCheck = System.currentTimeMillis();
+
 		while (true) {
-		
+
 			now = System.nanoTime();
-			if(now - lastFrame >= timePerFrame) {
+			if (now - lastFrame >= timePerFrame) {
 				gamePanel.repaint();
-				lastFrame = System.nanoTime();
+				lastFrame = now;
 				frames++;
 			}
-			
-			
-			if(System.currentTimeMillis()- lastcheck>=1000){//1second = 1000ms
-				lastcheck = System.currentTimeMillis();
-				System.out.println("fps: " + frames);
+
+			if (System.currentTimeMillis() - lastCheck >= 1000) {
+				lastCheck = System.currentTimeMillis();
+				System.out.println("FPS: " + frames);
 				frames = 0;
 			}
-			
 		}
-		
-		
+
 	}
-	
+
 }
