@@ -1,5 +1,9 @@
 package main;
 
+import java.awt.Graphics;
+
+import entities.Player;
+
 public class Game implements Runnable {
 
 	private GameWindow gameWindow;
@@ -9,12 +13,26 @@ public class Game implements Runnable {
 	private final int UPS_SET = 200;
 
 
-	public Game() {
+	private Player player; 
 
-		gamePanel = new GamePanel();
+	public Game() {
+		initClasses();
+
+
+		gamePanel = new GamePanel(this);
 		gameWindow = new GameWindow(gamePanel);
 		gamePanel.requestFocus();
+
+
+
+
 		startGameLoop();
+
+	}
+
+	private void initClasses() {
+		player = new Player(200, 200);
+
 
 	}
 
@@ -23,10 +41,15 @@ public class Game implements Runnable {
 		gameThread.start();
 	}
 
-	private void update() {
-		gamePanel.updateGame();
-
+	public void update() {
+		player.update();
 	}
+
+	public void render(Graphics g) {
+		player.render(g);
+	}
+
+
 	//	@Override
 	public void run() {//her pcde ayni hizda calismasi icin ayarliyoruz
 
@@ -72,6 +95,14 @@ public class Game implements Runnable {
 				updates = 0;
 			}
 		}
+	}
+
+	public void windowFocusLost() {
+		player.resetDirBooleans();
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 }
 
