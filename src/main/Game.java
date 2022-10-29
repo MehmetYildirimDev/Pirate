@@ -11,10 +11,18 @@ public class Game implements Runnable {
 	private Thread gameThread;
 	private final int FPS_SET = 120;
 	private final int UPS_SET = 200;
-
-
 	private Player player; 
 
+	//genislik ve yuksekligi otomotize ediyoruz
+	public final static int TILE_DEFAULT_SIZE = 32;
+	public final static Float SCALE = 1.5f;//48 karo boyutu
+	public final static int TILES_IN_WIDTH = 26;
+	public final static int TILES_IN_HEIGHT = 14;
+	public final static int TILES_SIZE = (int)(TILE_DEFAULT_SIZE * SCALE) ;
+	public final static int GAME_WIDHT = TILES_SIZE * TILES_IN_WIDTH;
+	public final static int GAME_HEIGHT= TILES_SIZE * TILES_IN_HEIGHT;
+	
+	
 	public Game() {
 		initClasses();
 

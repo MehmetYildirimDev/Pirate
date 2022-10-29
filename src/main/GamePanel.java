@@ -14,6 +14,8 @@ import inputs.MouseInputs;
 
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.Constants.Directions.*;
+import static main.Game.GAME_WIDHT;
+import static main.Game.GAME_HEIGHT;;
 
 public class GamePanel extends JPanel {
 
@@ -35,7 +37,8 @@ public class GamePanel extends JPanel {
 
 
 	private void setPanelSize() {
-		Dimension size = new Dimension(1280, 800);
+		Dimension size = new Dimension(GAME_WIDHT, GAME_HEIGHT);
+		System.out.println("size: " +GAME_WIDHT  +":" +GAME_HEIGHT );
 		setPreferredSize(size);
 	}
 
