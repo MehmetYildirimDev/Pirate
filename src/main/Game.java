@@ -60,6 +60,7 @@ public class Game implements Runnable {
 	public void render(Graphics g) {
 		levelManager.draw(g);
 		player.render(g);
+		
 	}
 
 
